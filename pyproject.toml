@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=77", "setuptools_scm[toml]>=7"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deltakit-textbook"
+authors = [
+  { name = "Riverlane Ltd", email = "deltakit@riverlane.com" },
+]
+description = "Deltakit Textbook: An Introduction to Quantum Error Correction"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering",
+  "Typing :: Typed",
+]
+dynamic = ["version"]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/deltakit/deltakit-textbook"
+"Bug Tracker" = "https://github.com/deltakit/deltakit-textbook/issues"
+Discussions = "https://github.com/deltakit/deltakit-textbook/discussions"
+Changelog = "https://github.com/deltakit/deltakit-textbook/releases"
+
+
+[dependency-groups]
+docs = [
+  "sphinx>=7.0",
+  "myst_parser>=0.13",
+  "sphinx_copybutton",
+  "sphinx_autodoc_typehints",
+  "furo>=2023.08.17",
+  "myst_nb>=1.2.0",
+  "sphinx_book_theme>=1.1.4",
+  "sphinx_design>=0.6.1",
+  "matplotlib>=3.10.3",
+  "cirq>=1.5.0",
+  "ipywidgets>=3.0.15",
+  "stimcirq>=1.15.0",
+  "numpy>=2.3.0",
+  "holoviews>=1.21.0"
+]
