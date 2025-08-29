@@ -1,11 +1,3 @@
-# deltakit
-
-```{toctree}
-:maxdepth: 2
-:hidden:
-
-```
-
 ```{toctree}
 :caption: Deltakit Textbook
 :hidden:
