@@ -1,3 +1,7 @@
+---
+redirect: notebooks/contents
+---
+
 ```{toctree}
 :caption: Deltakit Textbook
 :hidden:
