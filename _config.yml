@@ -1,0 +1,6 @@
+sphinx:
+  config:
+    root_doc: notebooks/contents
+    html_theme_options:
+      collapse_navigation: true
+      navigation_depth: 1
