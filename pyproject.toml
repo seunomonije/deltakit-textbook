@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "deltakit-textbook"
 authors = [
-  { name = "Riverlane Ltd", email = "deltakit@riverlane.com" },
+  { name = "Riverlane Ltd", email = "deltakit-textbook@riverlane.com" },
 ]
 description = "Deltakit Textbook: An Introduction to Quantum Error Correction"
 readme = "README.md"
