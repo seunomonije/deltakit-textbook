@@ -1,0 +1,11 @@
+{# On this page header text for current page
+github/@aasfaw
+#}
+{% set toc_html = page_toc or theme_page_toc or toc %}
+
+{% if toc_html %}
+<nav id="bd-toc-nav" class="page-toc" aria-label="{{ _('On this page') }}">
+  <p class="sidebar-title">{{ _('On this page') }}</p>
+  {{ toc_html }}
+</nav>
+{% endif %}

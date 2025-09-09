@@ -1,6 +1,6 @@
 from math import floor, comb
 import numpy as np
-import matplotlib.pyplot as plotter
+import matplotlib.pyplot as plotter; plotter.rcParams['font.family'] = 'Monospace'
 import cirq
 from myMWPM import MWPMDecoder1D
 from tqdm import tqdm
@@ -138,6 +138,8 @@ def plot_logical_error_probabilities(distances, physical_errors, all_logical_err
     
     plotter.legend()
     plotter.xlim([physical_errors.min(), physical_errors.max()])
+    plotter.ylim([1e-10, 1.1])
+    plotter.grid(visible=True, which='major', axis='both')
     plotter.xlabel('Physical error probability')
     plotter.ylabel('Logical error probability')
     plotter.tight_layout()
