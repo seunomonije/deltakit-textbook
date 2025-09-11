@@ -65,8 +65,8 @@ html_theme_options = {
     },
     "navigation_with_keys": False,
     # Move page ToC into the left sidebar and remove the right one
-    "show_nav_level": 2,
-    "show_toc_level": 3,
+    "show_nav_level": 1,
+    "show_toc_level": 1,
     "secondary_sidebar_items": [],  # hide right sidebar
 }
 
