@@ -118,37 +118,42 @@ def get_logical_error_probability_analytical(distances, physical_errors):
 
     return all_analytical_errors
 
-def plot_logical_error_probabilities(distances, physical_errors, all_logical_errors, all_analytical_errors):
+def plot_logical_error_probabilities(distances, physical_errors, all_logical_errors, all_analytical_errors, ylim=[1e-10, 1.1]):
     
     plotter.figure(figsize=(10, 8))
-    if distances is not None:
-        colors = plotter.cm.viridis(np.linspace(0, 0.8, len(distances)))
-    else:
-        colors = plotter.cm.viridis(np.linspace(0, 0.8, 1))
-    
-    plotter.loglog(physical_errors, physical_errors, label = 'Unprotected qubit',
-                      linewidth=2, linestyle = '--', color='gray',
-                      )
 
-    if all_analytical_errors and distances:
-        for distance, logical_errors, analytical_errors, color in zip(distances, all_logical_errors, all_analytical_errors, colors):
-            plotter.loglog(physical_errors, logical_errors, label = f'd = {distance} simulated',
-                          marker='o', linewidth=2, markersize=8,
-                          color=color,
+    num_curves = 1 if distances is None else len(distances)
+    colors = plotter.cm.viridis(np.linspace(0, 0.8, num_curves))
+
+    plotter.loglog(physical_errors, physical_errors, label = 'Unprotected qubit',
+                          linewidth=2, linestyle = '--', color='gray',
                           )
-            plotter.loglog(physical_errors, analytical_errors, label = f'd = {distance} analytical',
-                          linewidth=2, linestyle = '--', color=color,
+    
+    if distances is None:
+        plotter.loglog(physical_errors, all_logical_errors,
+                          marker='o', linewidth=2, markersize=8,
+                          color=colors[0],
                           )
     else:
-        for logical_errors, color in zip(all_logical_errors, colors):
-            plotter.loglog(physical_errors, logical_errors,
-                          marker='o', linewidth=2, markersize=8,
-                          color=color,
-                          )
+        if all_analytical_errors is None:
+            for distance, logical_errors, color in zip(distances, all_logical_errors, colors):
+                    plotter.loglog(physical_errors, logical_errors, label = f'd = {distance}',
+                                  marker='o', linewidth=2, markersize=8,
+                                  color=color,
+                                  )
+        else:
+            for distance, logical_errors, analytical_errors, color in zip(distances, all_logical_errors, all_analytical_errors, colors):
+                plotter.loglog(physical_errors, logical_errors, label = f'd = {distance} simulated',
+                              marker='o', linewidth=2, markersize=8,
+                              color=color,
+                              )
+                plotter.loglog(physical_errors, analytical_errors, label = f'd = {distance} analytical',
+                              linewidth=2, linestyle = '--', color=color,
+                              )
     
     plotter.legend()
     plotter.xlim([physical_errors.min(), physical_errors.max()])
-    plotter.ylim([1e-10, 1.1])
+    plotter.ylim(ylim)
     plotter.grid(visible=True, which='major', axis='both')
     plotter.xlabel('Physical error probability')
     plotter.ylabel('Logical error probability')
