@@ -1,3 +1,7 @@
+### Version History
+### - v0: Aug 14, 2025, [github/@ESMatekole](https:github.com/esmatekole)
+### - v1: Sep 12, 2025, [github/@aasfaw](https:github.com/aasfaw)
+
 import cirq
 import matplotlib.pyplot as plotter
 from matplotlib.patches import Circle, Rectangle

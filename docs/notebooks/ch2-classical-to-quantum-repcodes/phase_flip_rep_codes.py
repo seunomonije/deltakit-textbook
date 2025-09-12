@@ -1,3 +1,6 @@
+### Version History
+### - v0: Sep 12, 2025, [github/@aasfaw](https:github.com/aasfaw)
+
 from math import floor, comb
 import numpy as np
 import matplotlib.pyplot as plotter; plotter.rcParams['font.family'] = 'Monospace'

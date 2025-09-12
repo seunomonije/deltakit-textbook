@@ -1,3 +1,6 @@
+### Version History
+### - v0: Sep 12, 2025, [github/@aasfaw](https:github.com/aasfaw)
+
 class MWPMDecoder1D:
 
     def __init__(self, num_qubits):
