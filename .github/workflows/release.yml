@@ -1,11 +1,11 @@
 ---
-name: Build and publish textbook
+name: Build and publish Textbook
 
 on:
   workflow_dispatch:
     inputs:
-      upload_docs_target:
-        description: 'Upload textbook to prod or staging'
+      upload_target:
+        description: 'Upload Textbook to prod or staging'
         required: true
         default: 'prod'
         options:
@@ -19,7 +19,7 @@ on:
         type: string
 
 jobs:
-  build-docs:
+  build-textbook:
     permissions:
       contents: read         # for checkout
 
@@ -34,17 +34,17 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v1
 
-      - name: Build docs with uvx
+      - name: Build Textbook with uvx
         run: uvx nox -s docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload only the built HTML docs
+          # Upload only the built HTML Textbook
           path: '_build/html'
 
-  upload-docs:
-    needs: [build-docs]
+  upload-textbook:
+    needs: [build-textbook]
     runs-on: ubuntu-latest
     steps:
       - name: Download documentation artifact
@@ -55,29 +55,29 @@ jobs:
 
       - name: Push to storage account
         run: |
-          # Check if the docs folder name is specified
+          # Check if the textbook folder name is specified
           if [ -z "${{ inputs.textbook_dest }}" ]; then
-            DOCS_DEST_PATH="textbook/${{ github.ref_name }}"
+            TEXTBOOK_DEST_PATH="textbook/${{ github.ref_name }}"
           else
-            DOCS_DEST_PATH="textbook/${{ inputs.textbook_dest }}"
+            TEXTBOOK_DEST_PATH="textbook/${{ inputs.textbook_dest }}"
           fi
 
           # Set storage account name based on target environment
-          if [ "${{ inputs.upload_docs_target }}" = "prod" ]; then
+          if [ "${{ inputs.upload_target }}" = "prod" ]; then
             STORAGE_ACCOUNT_NAME="${{ secrets.AZ_STORAGE_ACCOUNT_NAME }}"
             STORAGE_ACCOUNT_KEY="${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}"
-          elif [ "${{ inputs.upload_docs_target }}" = "staging" ]; then
+          elif [ "${{ inputs.upload_target }}" = "staging" ]; then
             STORAGE_ACCOUNT_NAME="${{ secrets.AZ_STORAGE_ACCOUNT_NAME_STAGING }}"
             STORAGE_ACCOUNT_KEY="${{ secrets.AZ_STORAGE_ACCOUNT_KEY_STAGING }}"
           else
-            echo "Error: Invalid publish_docs_target value. Must be 'prod' or 'staging'."
+            echo "Error: Invalid upload_target value. Must be 'prod' or 'staging'."
             exit 1
           fi
 
-          # Delete docs folder if exists
+          # Delete textbook folder if exists
           az storage blob delete-batch \
             --source ${{ secrets.AZ_STORAGE_ACCOUNT_CONTAINER }} \
-            --pattern "$DOCS_DEST_PATH/*" \
+            --pattern "$TEXTBOOK_DEST_PATH/*" \
             --account-name "$STORAGE_ACCOUNT_NAME" \
             --account-key "$STORAGE_ACCOUNT_KEY"
 
@@ -85,6 +85,6 @@ jobs:
           az storage blob upload-batch \
             --destination ${{ secrets.AZ_STORAGE_ACCOUNT_CONTAINER }} \
             --source "_build/html" \
-            --destination-path "$DOCS_DEST_PATH" \
+            --destination-path "$TEXTBOOK_DEST_PATH" \
             --account-name "$STORAGE_ACCOUNT_NAME" \
             --account-key "$STORAGE_ACCOUNT_KEY"
