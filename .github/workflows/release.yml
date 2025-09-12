@@ -12,7 +12,7 @@ on:
           - prod
           - staging
         type: choice
-      docs_folder_name:
+      textbook_dest:
         description: 'Textbook destination folder name (default: git ref name)'
         required: false
         default: ''
@@ -56,10 +56,10 @@ jobs:
       - name: Push to storage account
         run: |
           # Check if the docs folder name is specified
-          if [ -z "${{ inputs.docs_folder_name }}" ]; then
+          if [ -z "${{ inputs.textbook_dest }}" ]; then
             DOCS_DEST_PATH="textbook/${{ github.ref_name }}"
           else
-            DOCS_DEST_PATH="textbook/${{ inputs.docs_folder_name }}"
+            DOCS_DEST_PATH="textbook/${{ inputs.textbook_dest }}"
           fi
 
           # Set storage account name based on target environment
