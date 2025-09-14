@@ -1,7 +1,7 @@
 ### Version History
 ### - v0: Sep 12, 2025, [github/@aasfaw](https:github.com/aasfaw)
 
-from math import floor, comb
+from math import comb, ceil
 import numpy as np
 import matplotlib.pyplot as plotter; plotter.rcParams['font.family'] = 'Monospace'
 import cirq
@@ -19,28 +19,21 @@ def create_repetition_code_encoder(n_qubits):
 
     return circuit
 
-def get_syndrome_measurement(qubits, ancilla_qubits, repcode_type = 'Z'):
+def get_syndrome_measurement(qubits, ancilla_qubits):
 
     syndrome_measurement = []
 
-    if repcode_type == 'Z': # bit-flip rep codes using ZZ stabilizers
-        for i in range(len(qubits) - 1):
-            # Extract the parity of qubits i and i+1 onto ancillary qubit i
-            syndrome_measurement.append(cirq.CNOT(qubits[i], ancilla_qubits[i]))
-            syndrome_measurement.append(cirq.CNOT(qubits[i+1], ancilla_qubits[i]))
-    elif repcode_type == 'X': # phase-flip rep codes -- detected by turning phase flips to bit flips
-        for i in range(len(qubits) - 1):
-            # Extract the parity of qubits i and i+1 onto ancillary qubit i
-            syndrome_measurement.append(cirq.CNOT(qubits[i], ancilla_qubits[i]))
-            syndrome_measurement.append(cirq.CNOT(qubits[i+1], ancilla_qubits[i]))
+    for i in range(len(qubits) - 1):
+        # Extract the parity of qubits i and i+1 onto ancillary qubit i
+        syndrome_measurement.append(cirq.CNOT(qubits[i], ancilla_qubits[i]))
+        syndrome_measurement.append(cirq.CNOT(qubits[i+1], ancilla_qubits[i]))
         
     # Measure the ancilla qubits to extract the syndrome
     syndrome_measurement.append(cirq.measure(*ancilla_qubits, key='syndrome'))
     
     return syndrome_measurement
 
-def create_full_repetition_code_circuit(n_qubits, error_gate = cirq.X, logical_state = '0', 
-                                        repcode_type = 'Z'):
+def create_full_repetition_code_circuit(n_qubits, error_gate = cirq.X, logical_state = '0'):
 
     # Create qubits: data qubits for encoding, ancillary qubits for syndrome measurement
     data_qubits = cirq.LineQubit.range(n_qubits)
@@ -94,7 +87,7 @@ def create_full_repetition_code_circuit(n_qubits, error_gate = cirq.X, logical_s
     )
             
     # Step 2: Measure error syndrome
-    circuit += get_syndrome_measurement(data_qubits, ancilla_qubits, repcode_type = repcode_type)
+    circuit += get_syndrome_measurement(data_qubits, ancilla_qubits)
 
     # Step 3: Measure data qubits
     circuit.append(cirq.measure(*data_qubits, key='data_qubits'))
@@ -102,22 +95,21 @@ def create_full_repetition_code_circuit(n_qubits, error_gate = cirq.X, logical_s
     return circuit
 
 def get_logical_error_probability_analytical(distances, physical_errors):
-    
-    # method 1: small p approximation
+
+    # # method 1: small p approximation
     # all_analytical_errors = []
     # for distance in distances:
-    #     t = floor((distance - 1) / 2)
-    #     analytical_errors = comb(distance, t+1) * physical_errors**(t+1)
+    #     t = ceil(distance / 2)
+    #     analytical_errors = comb(distance, t) * physical_errors**t
     #     all_analytical_errors.append(analytical_errors)
 
     # method 2: full expression
     all_analytical_errors = []
     for distance in distances:
-        analytical_success = 0
-        for i in range(floor(distance/2.)+1):
-            analytical_success += comb(distance, i) * physical_errors**i * (1-physical_errors)**(distance-i)
-        analytical_errors = 1-analytical_success
-        all_analytical_errors.append(analytical_errors)
+        analytical_error = 0
+        for i in range(ceil(distance/2.), distance + 1):
+            analytical_error += comb(distance, i) * physical_errors**i * (1-physical_errors)**(distance-i)
+        all_analytical_errors.append(analytical_error)
 
     return all_analytical_errors
 
@@ -172,8 +164,7 @@ def get_binary_representation(index, n_qubits):
 def get_logical_error_probability_for_rep_code(n_qubits, error_probability, 
                                                logical_state = '0', error_gate = cirq.X, 
                                                n_shots = 100, 
-                                               simulator = cirq.Simulator(),
-                                               repcode_type = 'Z',
+                                               simulator = cirq.Simulator()
                                                ):
 
     if n_qubits == 1:
@@ -181,7 +172,7 @@ def get_logical_error_probability_for_rep_code(n_qubits, error_probability,
     
     # step 1: build the repetition code circuit without errors
     base_circuit = create_full_repetition_code_circuit(n_qubits, logical_state = logical_state, 
-                                                       error_gate = error_gate, repcode_type = repcode_type)
+                                                       error_gate = error_gate)
 
     # step 2: generate all errors
     # first, create independent errors in a n_shots x n_qubits matrix
@@ -222,31 +213,17 @@ def get_logical_error_probability_for_rep_code(n_qubits, error_probability,
     decoded_syndromes = [decoder.decode(syndrome) for syndrome in syndromes]
 
     # step 6: count logical errors
-    datas = [results[i][0].measurements['data_qubits'].tolist()[0] for i in range(n_shots)]
-
     logical_errors = 0
-    if repcode_type == 'Z': # bit-flip rep code using ZZ parity checks
-        # correct the data qubits using the syndrome measurements and compare with known initial state
-        initial_state = [int(logical_state)]*n_qubits
-        for data, error_locations in zip(datas, decoded_syndromes):
-            final_state = data.copy()
-            for error_location in error_locations:
-                final_state[error_location] = 1-final_state[error_location] # flip the bit at error_location
-            if not np.array_equal(initial_state, final_state):
-                logical_errors += 1
-
-    elif repcode_type == 'X': # phase-flip rep code, detecting phase flips by turning them into bit flips
-        for actual_error_locations, decoded_error_locations, in zip(actual_errors_all_shots, decoded_syndromes):
-            # compare decoder with knowledge of actual error locations
-            if not np.array_equal(actual_error_locations, decoded_error_locations):
-                logical_errors += 1
+    for actual_error_locations, decoded_error_locations, in zip(actual_errors_all_shots, decoded_syndromes):
+        # compare decoder with knowledge of actual error locations
+        if not np.array_equal(actual_error_locations, decoded_error_locations):
+            logical_errors += 1
             
     return logical_errors * 1. / n_shots
 
 def get_logical_error_probability_simulated(distances, physical_errors, n_shots = 1000000, 
                                             logical_state = '0', error_gate = cirq.X,
                                             simulator = cirq.Simulator(),
-                                            repcode_type = 'Z'
                                            ):
 
     all_logical_errors = []
@@ -260,7 +237,6 @@ def get_logical_error_probability_simulated(distances, physical_errors, n_shots 
                                          logical_state = logical_state,
                                          error_gate = error_gate,
                                          n_shots = n_shots,
-                                         repcode_type = repcode_type,
                                          simulator = simulator)
             thisdistance_logicalerrors.append(logical_error)
         all_logical_errors.append(thisdistance_logicalerrors)
