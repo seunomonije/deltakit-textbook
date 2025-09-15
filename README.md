@@ -1,6 +1,4 @@
-# deltakit-textbook
-
-Deltakit Textbook: A hands-on introduction to Quantum Error Correction (QEC) concepts
+# Deltakit Textbook: A hands-on introduction to Quantum Error Correction (QEC) concepts
 
 Written by the Riverlane team and friends. 
 
@@ -10,12 +8,12 @@ This repository contains the files for the textbook which appears at [deltakit.g
 
 Quantum error correction (QEC) is a key ingredient that is necessary for unlocking the full potential of quantum computers. To build large-scale error-corrected quantum computers with hundreds to thousands of logical qubits running millions to billions of operations, we will need the participation of experts across various disciplines, and they will all need to upskill in QEC. Today, QEC talent is rare, and is the most commonly reported challenge as quantum computing teams begin their journeys toward fault tolerance.
 
-This textbook aims to bridge the gap between the understanding of QEC and the practice of QEC. The core principles for the textbook are:
+This textbook aims to bridge the gap between **the understanding** of QEC and **the practice** of QEC. The core principles for the textbook are:
 
-- Hands-on to encourage experimentation with QEC, and enable the learner to reproduce recent research results using state-of-the-art QEC tools,
-- Detailed, showing every step at first before using an advanced QEC tool that hides all the details, so that learners understand the nuances of QEC,
-- Interactive, so that readers can experiment while reading the textbook,
-- Open-source, so that QEC experts can enable QEC learners by contributing modern QEC concepts to the textbook.
+- **Hands-on** to encourage experimentation with QEC, and enable the learner to reproduce recent research results using state-of-the-art QEC tools,
+- **Detailed**, showing every step at first before using an advanced QEC tool that hides all the details, so that learners understand the nuances of QEC,
+- **Interactive**, so that readers can experiment while reading the textbook,
+- **Open-source**, so that QEC experts can enable QEC learners by contributing modern QEC concepts to the textbook.
 
 ## Prerequisites
 The pedagogy in the textbook assumes that a reader is familiar with quantum states, gates, circuits, and measurements. We also assume familiarity with the matrix manipulation associated with quantum circuits, and the matrices for the Pauli gates.
@@ -23,9 +21,9 @@ The pedagogy in the textbook assumes that a reader is familiar with quantum stat
 ## How to best use this textbook for self-learning
 There are several places where one can obtain a deep understanding of QEC concepts. However, fully detailed implementation of the quantum circuits in QEC is not widely available. For this reason, this hands-on textbook is best used as a supplement to another textbook that provides grounding in the principles of QEC. Some recommended resources:
 
-- Dan Browne’s Lectures on Topological Codes and Quantum Computation
-- John Preskill’s Ph219 lecture notes (particularly Chapter 7)
-- Daniel Gottesman’s PhD dissertation on Stabilizer Codes and Quantum Error Correction
+- Dan Browne's [Lectures on Topological Codes and Quantum Computation](https://sites.google.com/site/danbrowneucl/teaching/lectures-on-topological-codes-and-quantum-computation)
+- John Preskill's [Ph219 lecture notes](https://www.preskill.caltech.edu/ph219/) (particularly Chapter 7)
+- Daniel Gottesman's [PhD dissertation on Stabilizer Codes and Quantum Error Correction](https://arxiv.org/pdf/quant-ph/9705052)
 
 ## How to best use this textbook in a quantum computing course
 The first few weeks of a typical first quantum computing course cover concepts such as qubits and quantum states, gates, measurements, quantum circuits, and circuit identities. Then, the coursework typically branches toward various directions – for example, sometimes they continue toward extensive discussion of quantum algorithms, or focus on surveying the physics of quantum devices and systems.
@@ -46,7 +44,7 @@ Here is a list of topics that are currently looking for contributors
 
 If you have an idea for a contribution that does not appear in the list above, we encourage you to create an issue tagged as a contribution to discuss the parameters of the contribution before spending the time creating it. Issues will auto-tag a member of the Riverlane team who will pull in the right experts to guide the contribution to completion.
 
-Every contribution is assigned a reviewer at Riverlane who will check for factual consistency and clarity. ## 
+Every contribution is assigned a reviewer at Riverlane who will check for factual consistency and clarity. 
 
 ### Build instructions
 
