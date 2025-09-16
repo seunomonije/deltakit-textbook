@@ -43,6 +43,8 @@ Here is a list of topics that are currently looking for contributors
 | ZX Calculus and error propagation | TBD |
 | Considerations of QEC experiments on real systems | TBD |
 | Real-time QEC | TBD |
+| Noise models 101 | TBD |
+| Decoder library additions | TBD |
 
 If you have an idea for a contribution that does not appear in the list above, we encourage you to create an issue tagged as a contribution to discuss the parameters of the contribution before spending the time creating it. Issues will auto-tag a member of the Riverlane team who will pull in the right experts to guide the contribution to completion.
 

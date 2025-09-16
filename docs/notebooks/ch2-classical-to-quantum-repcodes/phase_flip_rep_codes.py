@@ -19,25 +19,25 @@ def create_repetition_code_encoder(n_qubits):
 
     return circuit
 
-def get_syndrome_measurement(qubits, ancilla_qubits):
+def get_syndrome_measurement(qubits, syndrome_qubits):
 
     syndrome_measurement = []
 
     for i in range(len(qubits) - 1):
-        # Extract the parity of qubits i and i+1 onto ancillary qubit i
-        syndrome_measurement.append(cirq.CNOT(qubits[i], ancilla_qubits[i]))
-        syndrome_measurement.append(cirq.CNOT(qubits[i+1], ancilla_qubits[i]))
+        # Extract the parity of qubits i and i+1 onto syndrome qubit i
+        syndrome_measurement.append(cirq.CNOT(qubits[i], syndrome_qubits[i]))
+        syndrome_measurement.append(cirq.CNOT(qubits[i+1], syndrome_qubits[i]))
         
-    # Measure the ancilla qubits to extract the syndrome
-    syndrome_measurement.append(cirq.measure(*ancilla_qubits, key='syndrome'))
+    # Measure the syndrome qubits to extract the syndrome
+    syndrome_measurement.append(cirq.measure(*syndrome_qubits, key='syndrome'))
     
     return syndrome_measurement
 
 def create_full_repetition_code_circuit(n_qubits, error_gate = cirq.X, logical_state = '0'):
 
-    # Create qubits: data qubits for encoding, ancillary qubits for syndrome measurement
+    # Create qubits: data qubits for encoding, syndrome qubits for syndrome measurement
     data_qubits = cirq.LineQubit.range(n_qubits)
-    ancilla_qubits = cirq.LineQubit.range(n_qubits, 2*n_qubits - 1)
+    syndrome_qubits = cirq.LineQubit.range(n_qubits, 2*n_qubits - 1)
     
     circuit = cirq.Circuit()
 
@@ -87,7 +87,7 @@ def create_full_repetition_code_circuit(n_qubits, error_gate = cirq.X, logical_s
     )
             
     # Step 2: Measure error syndrome
-    circuit += get_syndrome_measurement(data_qubits, ancilla_qubits)
+    circuit += get_syndrome_measurement(data_qubits, syndrome_qubits)
 
     # Step 3: Measure data qubits
     circuit.append(cirq.measure(*data_qubits, key='data_qubits'))

@@ -12,13 +12,13 @@ class PlanarSurfaceCode:
     Unrotated planar surface code with respective qubit layout.
     We will use a grid structure showing:
     - Data qubits (D)
-    - X ancillas (X)
-    - Z ancillas (Z)    
+    - X measure qubits (X)
+    - Z measure qubits (Z)    
     """
     
     def __init__(self, distance):
         self.distance = distance
-        self.data_qubits, self.z_ancillas, self.x_ancillas = self.layout_planar_surface_code(distance)
+        self.data_qubits, self.z_meas_qubits, self.x_meas_qubits = self.layout_planar_surface_code(distance)
         self._define_stabilizers()
     
     def layout_planar_surface_code(self, d):
@@ -28,17 +28,17 @@ class PlanarSurfaceCode:
 
         """
         data_qubits = {}
-        z_anc = {} # qubits for Z stabilizers
-        x_anc = {} # qubits for X stabilizers
+        z_meas = {} # qubits for Z stabilizers
+        x_meas = {} # qubits for X stabilizers
         for i in range(2 * d - 1):
             for j in range(2 * d - 1):
                 if (i + j) % 2 == 0:
                     data_qubits[(i, j)] = cirq.GridQubit(i, j)
                 elif i % 2 == 0:
-                    z_anc[(i, j)] = cirq.GridQubit(i, j)
+                    z_meas[(i, j)] = cirq.GridQubit(i, j)
                 else:
-                    x_anc[(i, j)] = cirq.GridQubit(i, j)
-        return data_qubits, z_anc, x_anc
+                    x_meas[(i, j)] = cirq.GridQubit(i, j)
+        return data_qubits, z_meas, x_meas
     
     def _define_stabilizers(self):
         """
@@ -48,8 +48,8 @@ class PlanarSurfaceCode:
         self.x_stabilizers = {}
         self.z_stabilizers = {}
         
-        # X stabilizers - each X ancilla measures 4 neighboring data qubits
-        for pos in self.x_ancillas:
+        # X stabilizers - each X measures 4 neighboring data qubits
+        for pos in self.x_meas_qubits:
             i, j = pos
             neighbors = [
                 (i-1, j), (i+1, j), (i, j-1), (i, j+1)
@@ -59,8 +59,8 @@ class PlanarSurfaceCode:
             if data_neighbors:  # Only add if there are valid neighbors
                 self.x_stabilizers[pos] = data_neighbors
         
-        # Z stabilizers - each Z ancilla measures 4 neighboring data qubits  
-        for pos in self.z_ancillas:
+        # Z stabilizers - each Z measures 4 neighboring data qubits  
+        for pos in self.z_meas_qubits:
             i, j = pos
             neighbors = [
                 (i-1, j), (i+1, j), (i, j-1), (i, j+1)
@@ -72,7 +72,7 @@ class PlanarSurfaceCode:
 
     def visualize_layout(self):
         """
-        Visualize the surface code layout with data qubits and ancillas.
+        Visualize the surface code layout with data qubits and measure qubits.
         
         """
         fig, ax = plotter.subplots(1, 1, figsize=(10, 8))
@@ -87,8 +87,8 @@ class PlanarSurfaceCode:
             ax.add_patch(circle)
             ax.text(j, size-1-i, 'D', ha='center', va='center', fontweight='bold', fontsize=10)
         
-        # Draw X ancillas
-        for pos in self.x_ancillas:
+        # Draw X measure qubits
+        for pos in self.x_meas_qubits:
             i, j = pos
             color = 'lightgreen'
             
@@ -97,8 +97,8 @@ class PlanarSurfaceCode:
             ax.add_patch(square)
             ax.text(j, size-1-i, 'X', ha='center', va='center', fontweight='bold', fontsize=10)
         
-        # Draw Z ancillas
-        for pos in self.z_ancillas:
+        # Draw Z measure qubits
+        for pos in self.z_meas_qubits:
             i, j = pos
             color = 'lightyellow'   
             diamond_x = [j, j+0.15, j, j-0.15, j]
@@ -128,8 +128,8 @@ class PlanarSurfaceCode:
         
         legend_elements = [
             Circle((0, 0), 0.1, color='lightblue', ec='black', label='Data Qubit'),
-            Rectangle((0, 0), 0.1, 0.1, color='lightgreen', ec='black', label='X Ancilla'),
-            Rectangle((0, 0), 0.1, 0.1, color='lightyellow', ec='black', label='Z Ancilla'),
+            Rectangle((0, 0), 0.1, 0.1, color='lightgreen', ec='black', label='X Measure Qubit'),
+            Rectangle((0, 0), 0.1, 0.1, color='lightyellow', ec='black', label='Z Measure Qubit'),
         ]
         
         ax.legend(handles=legend_elements, loc='upper left', bbox_to_anchor=(1, 1))
@@ -138,9 +138,9 @@ class PlanarSurfaceCode:
         
         # Print surface code parameters
         print(f"Surface Code Distance: {self.distance}")
-        print(f"Total qubits: {len(self.data_qubits) + len(self.x_ancillas) + len(self.z_ancillas)}")
+        print(f"Total qubits: {len(self.data_qubits) + len(self.x_meas_qubits) + len(self.z_meas_qubits)}")
         print(f"Data qubits: {len(self.data_qubits)}")
-        print(f"X ancillas: {len(self.x_ancillas)}")
-        print(f"Z ancillas: {len(self.z_ancillas)}")
+        print(f"X measure qubits: {len(self.x_meas_qubits)}")
+        print(f"Z measure qubits: {len(self.z_meas_qubits)}")
         print(f"X stabilizers: {len(self.x_stabilizers)}")
         print(f"Z stabilizers: {len(self.z_stabilizers)}")
