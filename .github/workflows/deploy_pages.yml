@@ -1,12 +1,10 @@
-name: Deploy docs to GitHub Pages
+name: Deploy Textbook to GitHub Pages
 
 on:
   workflow_dispatch:
-  pull_request:
   push:
     branches:
       - main
-      - docs
   release:
     types:
       - published
