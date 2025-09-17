@@ -72,5 +72,5 @@ uvx nox -s docs
 
 ## Contact
 
-You can contact deltakit-textbook@riverlane.com for topics related to the textbook including usage in coursework,
+You can contact abraham.asfaw@riverlane.com for topics related to the textbook including usage in coursework,
 suggestions for new content or pedagogy improvements.
