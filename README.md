@@ -40,10 +40,16 @@ Here is a list of topics that are currently looking for contributors
 | Long-range interactions and qLDPC codes | TBD |
 | Transversal logic | TBD |
 | Specialized decoders | TBD |
+| Color codes | TBD |
+| Bicycle Bivariate (BB) codes | TBD |
+| Hypergraph product codes | TBD |
+| Flag gadgets | TBD |
 | ZX Calculus and error propagation | TBD |
 | Considerations of QEC experiments on real systems | TBD |
+| Hook errors in practice | TBD |
 | Real-time QEC | TBD |
-| Noise models 101 | TBD |
+| Noise models 101 (eg coherent errors, readout errors) | TBD |
+| Threshold theorems | TBD |
 | Decoder library additions | TBD |
 
 If you have an idea for a contribution that does not appear in the list above, we encourage you to create an issue tagged as a contribution to discuss the parameters of the contribution before spending the time creating it. Issues will auto-tag a member of the Riverlane team who will pull in the right experts to guide the contribution to completion.
