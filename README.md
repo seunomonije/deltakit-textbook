@@ -2,7 +2,7 @@
 
 Written by the Riverlane team and friends. 
 
-This repository contains the files for the textbook which appears at [deltakit.github.io/deltakit-textbook](https://deltakit.github.io/deltakit-textbook).
+This repository contains the files for the textbook which appears at [deltakit.github.io/deltakit-textbook/](https://deltakit.github.io/deltakit-textbook/).
 
 ## Motivation
 
