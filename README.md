@@ -44,7 +44,7 @@ Here is a list of topics that are currently looking for contributors
 | Bicycle Bivariate (BB) codes | TBD |
 | Hypergraph product codes | TBD |
 | Flag gadgets | TBD |
-| ZX Calculus and error propagation | TBD |
+| ZX Calculus and error propagation | [Lia Yeh](https://github.com/lia-approves/deltakit-textbook/) |
 | Considerations of QEC experiments on real systems | TBD |
 | Hook errors in practice | TBD |
 | Real-time QEC | TBD |
